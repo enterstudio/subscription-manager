@@ -18,8 +18,9 @@ from __future__ import print_function, division, absolute_import
 """
 This module contains utilities for syncing system syspurpose with candlepin server
 """
-
 import os
+import logging
+from syspurpose.files import SyncedStore
 
 # We do not want to have hard dependency on rhsm module nor subscription_manager
 try:
@@ -27,6 +28,9 @@ try:
     import rhsm.connection
     import rhsm.certificate2
     import rhsm.config
+    from subscription_manager.logutil import init_logger
+    init_logger()
+    log = logging.getLogger(__name__)
 except ImportError:
     rhsm = None
 
@@ -69,7 +73,7 @@ class SyspurposeSync(object):
         self.connection = None
         self.consumer_uuid = None
 
-    def send_syspurpose_to_candlepin(self, syspurpose_store):
+    def send_syspurpose_to_candlepin(self):
         """
         Try to sync system purpose to candlepin server.
         :param syspurpose_store: Instance of SystempurposeStore
@@ -105,14 +109,10 @@ class SyspurposeSync(object):
                 return False
             consumer_uuid = consumer_cert.subject.get('CN')
 
+            store = SyncedStore(uep=self.connection, consumer_uuid=consumer_uuid)
+
             try:
-                self.connection.updateConsumer(
-                    uuid=consumer_uuid,
-                    role=syspurpose_store.contents.get('role') or '',
-                    addons=syspurpose_store.contents.get('addons') or [],
-                    service_level=syspurpose_store.contents.get('service_level_agreement') or '',
-                    usage=syspurpose_store.contents.get('usage') or ''
-                )
+                store.sync()
             except Exception as err:
                 print('Unable to update consumer with system purpose: %s' % err)
                 return False

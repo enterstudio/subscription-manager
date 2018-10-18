@@ -108,7 +108,7 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         syspurpose_store = files.SyspurposeStore(temp_file)
         syspurpose_store.contents = dict(**test_data)
 
-        syspurpose_sync.send_syspurpose_to_candlepin(syspurpose_store)
+        syspurpose_sync.send_syspurpose_to_candlepin()
 
         instance_uep_connection.updateConsumer.assert_called_once_with(
             uuid="9d4778ae-80fe-4eed-a631-6be35fded7fe",
@@ -150,7 +150,7 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         syspurpose_store = files.SyspurposeStore(temp_file)
         syspurpose_store.contents = dict(**test_data)
 
-        syspurpose_sync.send_syspurpose_to_candlepin(syspurpose_store)
+        syspurpose_sync.send_syspurpose_to_candlepin()
 
         instance_uep_connection.updateConsumer.assert_called_once_with(
             uuid="9d4778ae-80fe-4eed-a631-6be35fded7fe",
