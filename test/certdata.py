@@ -431,6 +431,12 @@ Order:
 \tWarning Period: 30
 \tProvides Management: False
 
+Authorized Content URLs:
+\t/foo/path/always/$releasever
+\t/foo/path/never
+\t/path/to/$basearch/$releasever/awesomeos
+\t/path/to/awesomeos/x86_64
+
 Content:
 \tType: yum
 \tName: always-enabled-content

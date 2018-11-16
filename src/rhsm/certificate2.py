@@ -580,6 +580,12 @@ class EntitlementCertificate(ProductCertificate):
             self._path_tree_object = PathTree(data)
         return self._path_tree_object
 
+    @property
+    def provided_paths(self):
+        paths = []
+        self._path_tree.build_path_list(paths)
+        return paths
+
     def is_expiring(self, on_date=None):
         gmt = datetime.utcnow()
         if on_date:
